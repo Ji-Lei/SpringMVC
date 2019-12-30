@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/SpringMVC_Mybatis" />
+    <file type="web" url="file://$PROJECT_DIR$/SSM_Test" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES5" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/SpringMVC_1/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringMVC_2/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringMVC_Spr_Mybatis/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringMVC_Mybatis/pom.xml" />
+        <option value="$PROJECT_DIR$/PhoneInfo/pom.xml" />
+        <option value="$PROJECT_DIR$/SSM_Test/pom.xml" />
+        <option value="$PROJECT_DIR$/../SSM_Test/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_13" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
