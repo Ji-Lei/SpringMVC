@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/aop
+              http://www.springframework.org/schema/aop/spring-aop.xsd
+              http://www.springframework.org/schema/context
+              http://www.springframework.org/schema/context/spring-context-4.3.xsd
+              http://www.springframework.org/schema/tx
+              http://www.springframework.org/schema/tx/spring-tx-4.3.xsd" >
+
+       <!-- 读取属性文件 -->
+       <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       		<property name="location" value="classpath:db.properties"/>
+       </bean>
+              
+       <!-- 配置连接数据库的数据源(dbcp),可以配置多个数据源对象，id不同即可 -->
+       <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+       		<property name="driverClassName" value="${driver}" />
+       		<property name="url" value="${url}" />
+       		<property name="username" value="${username}" />
+       		<property name="password" value="${password}" />
+            <!-- 连接池初始化连接个数 -->
+            <property value="${initialSize}" name="initialSize"/>
+            <!-- 连接池中同时连接的最大连接数 -->
+            <property value="${maxActive}" name="maxActive"/>
+            <!-- 定义连接池中允许的最大空闲连接数 -->
+            <property value="${maxIdle}" name="maxIdle"/>
+            <!-- 定义连接池中允许的最小空闲连接数 -->
+            <property value="${minIdle}" name="minIdle"/>
+            <!-- 定义最大等待连接时间 -->
+            <property value="${maxWait}" name="maxWait"/>
+            <!-- 当回收机制开始时，控制连接池在超出时间后回收无用连接 -->
+            <property value="${removeAbandonedTimeout}" name="removeAbandonedTimeout"/>
+            <!-- 是否开启无用连接回收机制 -->
+            <property value="${removeAbandoned}" name="removeAbandoned"/>
+            <!-- sql 心跳 -->
+            <!-- 定义开始校验空闲连接回收器定时校验 -->
+            <property value="true" name="testWhileIdle"/>
+            <!-- 指明是否在从池中取出连接前进行检验,如果检验失败, 则从池中去除连接并尝试取出另一个 -->
+            <property value="false" name="testOnBorrow"/>
+            <!-- 指明是否在归还到池中前进行检验 -->
+            <property value="false" name="testOnReturn"/>
+            <!-- 定义校验所使用的SQL语句 -->
+            <property value="select 1" name="validationQuery"/>
+            <!-- 每60秒运行一次空闲连接回收器 -->
+            <property value="60000" name="timeBetweenEvictionRunsMillis"/>
+            <!-- 在每次空闲连接回收器运行时检查的连接数量 -->
+            <property value="${maxActive}" name="numTestsPerEvictionRun"/>
+       </bean>
+
+       <!-- 配置sqlSessionFactory -->
+       <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+       		<!-- 引用上述数据源 -->
+       		<property name="dataSource" ref="dataSource" />
+       		<property name="configLocation" value="classpath:sqlmapconfig.xml" />
+       </bean>
+       
+       <!-- 配置sqlSessionTemplate -->
+       <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+       		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+       </bean>
+
+       <!-- 批量生产实现类（实现类不用写了），扫描全部Mapper接口，其id为Mapper接口类名是首字母小写UserMapper.java的id为 userMapper-->
+       <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       	<!-- mapper为Mapper接口所在的包路径，扫描此包下所有Mapper接口 -->
+       		<property name="basePackage" value="com.jgs1902.dao.mapper"></property>
+       </bean>
+       
+       <!-- 使用注解的方式创建dao和service实例对象 -->
+       <context:component-scan base-package="com.jgs1902.service.impl,com.jgs1902.controller" />
+       
+       <!-- 定义事务管理器 -->
+       <bean id="txManager" 
+       		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+       		<property name="dataSource" ref="dataSource" />
+       </bean>
+
+       <!-- 注解的方式配置,配置事务管理器，开启注解，适合方法较少时使用 -->
+       <tx:annotation-driven transaction-manager="txManager"/>
+
+
+</beans>

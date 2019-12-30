@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jgs1902.dao.mapper.StaffMapper">
+
+    <resultMap id="staff" type="com.jgs1902.pojo.Staff">
+        <id property="id" column="id" />
+        <result property="staffname" column="staffname" />
+        <result property="password" column="password" />
+        <result property="job" column="job" />
+        <result property="name" column="name" />
+        <result property="role" column="role" />
+    </resultMap>
+
+    <!--查询所有-->
+    <select id="getStaffList" resultMap="staff">
+        select * from staff
+    </select>
+    <!--根据用户名查询职员-->
+    <select id="getStaff" resultType="com.jgs1902.pojo.Staff" parameterType="String">
+        select * from staff where staffname = #{staffname}
+    </select>
+
+    <!--刪除职员-->
+    <delete id="deleteStaff" parameterType="String">
+        delete from staff where staffname = #{staffname}
+    </delete>
+</mapper>
