@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+        function addStudent() {
+            var sname=$("#sname").val();
+            var sex=$("#sex").val();
+            var cno=$("#cno").val();
+            $.post(
+                "student1",
+                "sname="+sname+"&sex="+sex+"&cno="+cno,
+                function (data) {
+                    alert("提交成功！");
+                }
+            )
+        }
+    </script>
+</head>
+<body>
+<!--测试用-->
+    <input type="text" id="sname" placeholder="姓名"><br>
+    <input type="text" id="sex" placeholder="性别"><br>
+    <input type="text" id="cno" placeholder="学号"><br>
+    <input type="button" id="submit" onclick="addStudent()" value="提交"><br>
+</body>
+</html>
