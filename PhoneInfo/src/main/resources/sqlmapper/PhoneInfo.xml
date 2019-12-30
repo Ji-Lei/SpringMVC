@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jgs1902.dao.mapper.PhoneInfoMapper">
+    <resultMap id="info" type="com.jgs1902.pojo.Info">
+        <id property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="replyCount" column="replyCount" />
+        <result property="viewCount" column="viewCount" />
+        <result property="reportTime" column="reportTime" />
+        <result property="lastPostTime" column="lastPostTime" />
+    </resultMap>
+    <resultMap id="replies" type="com.jgs1902.pojo.Replies">
+        <id property="id" column="id" />
+        <result property="content" column="content" />
+        <result property="replyTime" column="replyTime" />
+        <result property="infoId" column="infoId" />
+    </resultMap>
+    <resultMap id="infoList" type="com.jgs1902.pojo.InfoList">
+        <collection property="infoList" ofType="com.jgs1902.pojo.Info" resultMap="info" />
+    </resultMap>
+    <resultMap id="contentList" type="com.jgs1902.pojo.InfoList">
+        <collection property="repliesList" ofType="com.jgs1902.pojo.Replies" resultMap="replies" />
+    </resultMap>
+    <insert id="insertInfo" parameterType="com.jgs1902.pojo.Info">
+        insert into informations values(null,#{title},#{content},0,0,#{reportTime},null)
+    </insert>
+
+    <!--查询资讯信息-->
+    <select id="getInfoById" resultMap="info" parameterType="Integer">
+        select * from informations
+            <trim prefix="where" prefixOverrides="and | or">
+                <if test="id != null">id = #{id} </if>
+            </trim>
+    </select>
+    <!--根据id查评论-->
+    <select id="getContentById" parameterType="Integer" resultMap="replies">
+        select * from replies where infoId = #{infoId}
+    </select>
+    <!--添加评论-->
+    <insert id="insertContent" parameterType="com.jgs1902.pojo.Replies">
+        insert into replies values(null,#{content},#{replyTime},#{infoId})
+    </insert>
+    <!--根据infoId查询评论数-->
+    <select id="getReplyCount" parameterType="Integer" resultType="Integer">
+        select count(infoId) from replies where infoId=#{infoId}
+    </select>
+    <!--设置信息表中的评论数和最新评论时间-->
+    <update id="setReplyCount" parameterType="com.jgs1902.pojo.Info">
+        update informations set replyCount=#{replyCount},lastPostTime=#{lastPostTime} where id=#{id}
+    </update>
+    <!--设置浏览量加一-->
+    <select id="setViewCount" parameterType="Integer">
+        update informations set viewCount=viewCount+1 where id=#{id}
+    </select>
+</mapper>
